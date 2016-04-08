@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Spectro live recording example</title>
+ 		
+		<script src="/socket.io/socket.io.js"></script>
+		<style>
+			#wrapper {
+				width: 1000px;
+				margin: 0 auto;
+				text-align: center;
+			}
+			#toggleRecording {
+				margin-bottom: 15px;
+			}
+			#spectrogram {
+				background-color: #eee;
+				border: solid 1px #ccc;
+				transform: scale(0.5, 0.5) translate(-1000px, -512px);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<button onclick="toggleRecording()" id="toggleRecording">Start recording</button><br>
+			<canvas id="spectrogram" width="2000", height="1024"></canvas>
+		</div>
+		<script>
+			var socket = io();
+
+			var canvas = document.getElementById("spectrogram");
+			var drawCtx = canvas.getContext("2d");
+
+			socket.on('data', function(frame) {				
+				for (var y = 0; y < frame.data.length; ++y) {
+					var color = frame.data[y]
+
+					drawCtx.fillStyle = 'rgb('+color.toString()+')';
+					drawCtx.fillRect(frame.index, frame.data.length-y, 1, 1);
+				}
+			});
+
+			var session = {
+				audio: true,
+				video: false
+			};
+			var recordRTC = null;
+			var context = null;
+			var isRecording = false;
+			navigator.webkitGetUserMedia(session, initializeRecorder, onError);
+			function initializeRecorder(stream) {
+				var audioContext = window.AudioContext;
+				context = new audioContext();
+				var audioInput = context.createMediaStreamSource(stream);
+				var bufferSize = 2048;
+				// create a javascript node
+				var recorder = context.createScriptProcessor(bufferSize, 1, 1);
+				// specify the processing function
+				recorder.onaudioprocess = recorderProcess;
+				// connect stream to our recorder
+				audioInput.connect(recorder);
+				// connect our recorder to the previous destination
+				recorder.connect(context.destination);
+
+				context.suspend()
+				isRecording = false;
+			}
+			function onError(err) {
+				console.error('Error', err);
+			}
+			function recorderProcess(e) {
+				var data = e.inputBuffer.getChannelData(0);
+				socket.emit('data', data)
+			}
+			function toggleRecording() {
+				if (isRecording) {
+					socket.emit('suspend')
+					context.suspend();
+					document.getElementById('toggleRecording').innerText = 'Restart recording';
+				} else {
+					socket.emit('resume')
+					context.resume();
+					document.getElementById('toggleRecording').innerText = 'Stop recording';
+				}
+				isRecording = !isRecording;
+			}
+		</script>
+	</body>
+</html>

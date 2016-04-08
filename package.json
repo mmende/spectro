@@ -1,0 +1,16 @@
+{
+  "name": "spectro",
+  "version": "1.0.0",
+  "description": "A clustered nods.js module to create a spectrogram from pcm audio data",
+  "main": "spectro.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martin Mende",
+  "license": "MIT",
+  "dependencies": {
+    "buffer-reader": "^0.1.0",
+    "chroma-js": "^1.1.1",
+    "dct": "0.0.3"
+  }
+}
