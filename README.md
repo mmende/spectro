@@ -42,7 +42,7 @@ spectro.on('end', (err, data) => {
     spectro.stop()
 
 	// The spectrogram can e.g. be drawn with third party modules such as pngjs
-	// Examples therefore can be found in examples/...
+	// Examples therefor can be found in examples/...
 })
 ``` 
 
