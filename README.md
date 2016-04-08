@@ -1,5 +1,13 @@
 # A clustered nods.js module to create spectrograms from pcm audio data
 
+# Install
+
+Spectro can be installed via npm:
+
+`npm install spectro`
+
+# Usage
+
 By using a cluster of workers to process the computational expensive stuff the execution time can be decreased dramatically.
 The spectrogram class is a writable stream where the data can be piped into.
 So the easiest way to use it is to pipe a wav file into it:
