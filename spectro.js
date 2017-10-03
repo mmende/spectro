@@ -172,7 +172,7 @@ if (cluster.isMaster) {
 			return
 		}
 		this.__process()
-		if (typeof callback === 'Function') callback(null)
+		if (typeof callback === 'function') callback(null)
 	}
 
 	/**
