@@ -1,6 +1,6 @@
 {
   "name": "spectro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A clustered nods.js module to create spectrograms from pcm audio data",
   "main": "spectro.js",
   "scripts": {
