@@ -1,4 +1,4 @@
-# A clustered nods.js module to create spectrograms from pcm audio data
+# A clustered node.js module to create spectrograms from pcm audio data
 
 # Install
 
